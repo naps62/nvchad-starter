@@ -7,4 +7,13 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+-- close current buffer
+map("n", "<leader>q", ":q<cr>")
+
+-- go back to normal mode
+map("i", "jj", "<Esc>")
+map("i", "jk", "<Esc>")
+
+--save file
+map("n", "<C-s>", ":update<CR>")
+map("i", "<C-s>", "<C-o>:update<CR><Esc>")
