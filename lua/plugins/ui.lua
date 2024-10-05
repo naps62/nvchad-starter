@@ -1,6 +1,7 @@
 return {
   {
     "levouh/tint.nvim",
+    event = "VeryLazy",
     config = function()
       require("tint").setup {
         tint = -10,
@@ -22,7 +23,6 @@ return {
       require("statuscol").setup {
         relculright = true,
         segments = {
-          { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
           { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
           { sign = { name = { ".*" }, maxwidth = 1, colwidth = 1 }, click = "v:lua.ScSa" },
         },
