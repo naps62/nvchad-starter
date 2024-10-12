@@ -9,6 +9,9 @@ local options = {
     -- "remove_unused_imports",
     "organize_imports",
   },
+  settings = {
+    tsserver_path = "~/.local/share/nvim/mason/packages/typescript-language-server",
+  },
   server = {
     on_attach = function(client, buffer)
       client.server_capabilities.documentFormattingProvider = false
