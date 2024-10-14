@@ -7,6 +7,10 @@ local options = {
     yaml = { "biome" },
     solidity = { "forge_fmt" },
     nix = { "nixfmt" },
+    toml = { "taplo" },
+  },
+  formatters = {
+    biome = { require_cwd = true },
   },
 
   format_on_save = function()
