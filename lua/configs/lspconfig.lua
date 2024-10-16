@@ -8,7 +8,7 @@ M.defaults = function()
   require("nvchad.configs.lspconfig").defaults()
 
   local lspconfig = require "lspconfig"
-  local servers = { "html", "cssls", "lua_ls", "biome" }
+  local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation" }
 
   vim.lsp.inlay_hint.enable()
 
