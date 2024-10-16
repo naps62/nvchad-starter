@@ -29,6 +29,13 @@ return {
         end,
         desc = "Grep string",
       },
+      {
+        "<leader>b",
+        function()
+          require("telescope.builtin").buffers()
+        end,
+        desc = "Buffers",
+      },
     },
   },
 }
