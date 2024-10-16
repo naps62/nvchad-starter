@@ -17,3 +17,9 @@ map("i", "jk", "<Esc>")
 --save file
 map("n", "<C-s>", ":update<CR>")
 map("i", "<C-s>", "<C-o>:update<CR><Esc>")
+
+-- switch between last two files
+-- map("n", "<tab>", ":b#<cr>", { desc = "switch between last two files" })
+
+-- remove search highlight
+map("n", "<leader>,", ":noh<cr>")
