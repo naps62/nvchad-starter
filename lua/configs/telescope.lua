@@ -35,8 +35,8 @@ local options = {
       height = 0.80,
     },
     mappings = {
-      n = { ["q"] = open_with_trouble, ["t"] = open_with_trouble },
-      i = { ["t"] = open_with_trouble },
+      n = { ["<C-q>"] = open_with_trouble, ["t"] = open_with_trouble },
+      i = { ["<C-t>"] = open_with_trouble },
     },
   },
 
