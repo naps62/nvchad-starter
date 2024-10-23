@@ -8,6 +8,7 @@ local options = {
     solidity = { "forge_fmt" },
     nix = { "nixfmt" },
     toml = { "taplo" },
+    typst = { "typstyle" },
   },
   formatters = {
     biome = { require_cwd = true },
