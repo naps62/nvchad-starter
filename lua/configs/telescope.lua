@@ -1,5 +1,7 @@
 dofile(vim.g.base46_cache .. "telescope")
 
+local open_with_trouble = require("trouble.sources.telescope").open
+
 local options = {
   pickers = {
     colorscheme = { enable_preview = true },
@@ -33,7 +35,8 @@ local options = {
       height = 0.80,
     },
     mappings = {
-      n = { ["q"] = require("telescope.actions").close },
+      n = { ["q"] = open_with_trouble, ["t"] = open_with_trouble },
+      i = { ["t"] = open_with_trouble },
     },
   },
 
