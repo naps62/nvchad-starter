@@ -12,3 +12,5 @@ o.relativenumber = true
 o.showmatch = true
 o.smartcase = true
 o.gdefault = true
+
+o.fillchars = "eob: ,diff: "

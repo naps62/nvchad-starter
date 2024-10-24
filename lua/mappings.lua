@@ -20,7 +20,3 @@ map("i", "<C-s>", "<C-o>:update<CR><Esc>")
 
 -- remove search highlight
 map("n", "<leader>,", ":noh<cr>")
-
--- quickfix navigation
-map("n", "[q", "<cmd>:cprev<cr>")
-map("n", "]q", "<cmd>:cnext<cr>")

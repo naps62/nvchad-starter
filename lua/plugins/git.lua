@@ -16,4 +16,18 @@ return {
       { "<leader>g", "<cmd>Neogit<CR>", desc = "Neogit" },
     },
   },
+
+  {
+    "sindrets/diffview.nvim",
+    event = "VeryLazy",
+    dependencies = "nvim-lua/plenary.nvim",
+    opts = {
+      enhanced_diff_hl = true,
+      file_panel = {
+        win_config = {
+          width = 25,
+        },
+      },
+    },
+  },
 }

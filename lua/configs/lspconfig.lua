@@ -11,6 +11,9 @@ M.defaults = function()
   local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation" }
 
   vim.lsp.inlay_hint.enable()
+  vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
+  })
 
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
@@ -41,11 +44,16 @@ M.on_attach = function(client, bufnr)
     require("telescope.builtin").lsp_references()
   end, opts "LSP References")
 
-  map("n", "ga", vim.lsp.buf.code_action, opts "Code Actions")
+  -- map("n", "ga", function()
+  --   vim.lsp.buf.code_action { async = true }
+  -- end, opts "Code Actions")
 end
 
 M.rustacean = {
   server = {
+    cmd = function()
+      return { "/home/naps62/.cargo/bin/ra-multiplex" }
+    end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
     on_attach = function(client, bufnr)
@@ -55,9 +63,9 @@ M.rustacean = {
         return { buffer = bufnr, desc = "LSP " .. desc }
       end
 
-      map("n", "ga", function()
-        vim.cmd.RustLsp "codeAction"
-      end, opts "Rust Code Actions")
+      -- map("n", "ga", function()
+      --   vim.cmd.RustLsp "codeAction"
+      -- end, opts "Rust Code Actions")
     end,
   },
   tools = {
