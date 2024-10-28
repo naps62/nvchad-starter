@@ -14,3 +14,4 @@ o.smartcase = true
 o.gdefault = true
 
 o.fillchars = "eob: ,diff: "
+o.scrolloff = 5

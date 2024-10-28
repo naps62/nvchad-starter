@@ -2,9 +2,24 @@ return {
   {
     "hrsh7th/nvim-cmp",
     opts = function()
-      require "configs.cmp"
+      return require "configs.cmp"
     end,
   },
+
+  {
+    "supermaven-inc/supermaven-nvim",
+    event = "VeryLazy",
+    config = function()
+      require("supermaven-nvim").setup {
+        keymaps = {
+          accept_suggestion = "<C-Enter>",
+        },
+        -- disable_inline_completion = true,
+      }
+    end,
+  },
+
+  { "onsails/lspkind.nvim", event = "VeryLazy" },
 
   -- {
   -- 	"zbirenbaum/copilot.lua",
