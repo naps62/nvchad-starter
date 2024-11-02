@@ -19,3 +19,5 @@ o.scrolloff = 5
 vim.o.guifont = "FiraCode Nerd Font Mono:h12"
 vim.g.neovide_scroll_animation_length = 0.15
 vim.g.neovide_cursor_animation_length = 0.11
+
+vim.o.swapfile = false

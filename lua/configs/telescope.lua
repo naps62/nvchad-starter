@@ -41,7 +41,15 @@ local options = {
   },
 
   extensions_list = { "themes", "terms" },
-  extensions = {},
+  extensions = {
+    repo = {
+      list = {
+        fd_opts = { "--max-depth", "3", "--exclude", "lib", "--exclude", "cargo", "--exclude", "node_modules", "-j2" },
+        search_dirs = { "~/projects", "~/subvisual", "~/ethui" },
+      },
+      settings = { auto_lcd = true },
+    },
+  },
 }
 
 return options

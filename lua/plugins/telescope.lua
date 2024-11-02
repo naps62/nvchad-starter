@@ -2,10 +2,11 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "cljoly/telescope-repo.nvim" },
     cmd = "Telescope",
-    opts = function()
-      return require "configs.telescope"
+    config = function()
+      require("telescope").setup(require "configs.telescope")
+      require("telescope").load_extension "repo"
     end,
     keys = {
       {
@@ -35,6 +36,12 @@ return {
           require("telescope.builtin").buffers()
         end,
         desc = "Buffers",
+      },
+      {
+        "<leader>p",
+        function()
+          require("telescope").extensions.repo.list {}
+        end,
       },
     },
   },
