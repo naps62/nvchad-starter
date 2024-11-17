@@ -3,8 +3,9 @@ return {
     "levouh/tint.nvim",
     event = "VeryLazy",
     config = function()
+      vim.api.nvim_set_hl(0, "NormalNC", { link = "Normal" })
       require("tint").setup {
-        tint = -10,
+        tint = -20,
         tint_background_colors = true,
 
         window_ignore_function = function(winid)
