@@ -56,6 +56,16 @@ M.rustacean = {
     end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
+    default_settings = {
+      ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
+        },
+        cargo = {
+          allFeatures = true,
+        },
+      },
+    },
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
