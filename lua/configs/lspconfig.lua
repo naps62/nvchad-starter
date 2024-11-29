@@ -52,7 +52,7 @@ end
 M.rustacean = {
   server = {
     cmd = function()
-      return { "/home/naps62/.cargo/bin/ra-multiplex" }
+      return { "ra-multiplex" }
     end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
