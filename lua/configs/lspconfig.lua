@@ -51,9 +51,9 @@ end
 
 M.rustacean = {
   server = {
-    cmd = function()
-      return { "ra-multiplex" }
-    end,
+    -- cmd = function()
+    --   return { "ra-multiplex" }
+    -- end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
     default_settings = {
