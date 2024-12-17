@@ -6,6 +6,9 @@ local options = {
       git_placement = "after",
     },
   },
+  on_attach = function(bufnr)
+    vim.keymap.del("n", "<C-e>", { buffer = bufnr })
+  end,
 }
 
 return vim.tbl_deep_extend("force", nvchad_options, options)
