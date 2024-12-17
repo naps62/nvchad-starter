@@ -1,4 +1,5 @@
 local nvchad_options = require "nvchad.configs.nvimtree"
+local api = require "nvim-tree.api"
 
 local options = {
   renderer = {
@@ -7,6 +8,7 @@ local options = {
     },
   },
   on_attach = function(bufnr)
+    api.config.mappings.default_on_attach(bufnr)
     vim.keymap.del("n", "<C-e>", { buffer = bufnr })
   end,
 }
