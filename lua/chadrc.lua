@@ -10,7 +10,7 @@ local M = {
     },
   },
   base46 = {
-    theme = "jabuti",
+    theme = "onenord",
   },
 
   nvdash = {
