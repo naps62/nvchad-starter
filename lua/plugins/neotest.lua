@@ -16,35 +16,35 @@ return {
     end,
     keys = {
       {
-        "<leader>nt",
+        "<leader>tt",
         function()
           require("neotest").run.run(vim.fn.expand "%")
         end,
         { desc = "Test current file" },
       },
       {
-        "<leader>nT",
+        "<leader>TT",
         function()
           require("neotest").run.run()
         end,
         { desc = "Run test suite" },
       },
       {
-        "<leader>ns",
+        "<leader>ts",
         function()
           require("neotest").summary.toggle()
         end,
         { desc = "Toggle neotest summary" },
       },
       {
-        "<leader>nw",
+        "<leader>tw",
         function()
           require("neotest").watch.watch(vim.fn.expand "%")
         end,
         { desc = "Watch current file" },
       },
       {
-        "<leader>nW",
+        "<leader>TW",
         function()
           require("neotest").watch.watch()
         end,
