@@ -50,6 +50,13 @@ return {
         end,
         { desc = "Watch test suite" },
       },
+      {
+        "<leader>to",
+        function()
+          require("neotest").output.open()
+        end,
+        { desc = "View test output" },
+      },
     },
   },
 }
