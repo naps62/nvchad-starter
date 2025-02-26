@@ -7,6 +7,11 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      -- enable MDX markdown
+      vim.filetype.add { extension = { mdx = "mdx" } }
+      local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
+      ft_to_parser.mdx = "markdown"
     end,
     opts = {
       ensure_installed = {
