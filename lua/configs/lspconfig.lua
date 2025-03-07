@@ -69,6 +69,10 @@ M.rustacean = {
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
 
+      map("n", "re", function()
+        vim.cmd.RustLsp "expandMacro"
+      end)
+
       local function opts(desc)
         return { buffer = bufnr, desc = "LSP " .. desc }
       end
