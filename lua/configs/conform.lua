@@ -9,6 +9,7 @@ local options = {
     nix = { "nixfmt" },
     toml = { "taplo" },
     typst = { "typstyle" },
+    csharp = { "csharpier" },
   },
   formatters = {
     biome = { require_cwd = true },
