@@ -8,7 +8,7 @@ M.defaults = function()
   require("nvchad.configs.lspconfig").defaults()
 
   local lspconfig = require "lspconfig"
-  local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist", "omnisharp" }
+  local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist" }
 
   vim.lsp.inlay_hint.enable()
   vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -23,6 +23,9 @@ M.defaults = function()
       inlay_hints = { enable = true },
     }
   end
+  lspconfig.omnisharp.setup {
+    cmd = { "/home/naps62/share/mason/bin/omnisharp-mono" },
+  }
 end
 
 M.on_attach = function(client, bufnr)
