@@ -15,6 +15,7 @@ return {
         "vimdoc",
         "html",
         "css",
+        "c_sharp",
         "rust",
         "regex",
         "javascript",

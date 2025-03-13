@@ -8,7 +8,7 @@ M.defaults = function()
   require("nvchad.configs.lspconfig").defaults()
 
   local lspconfig = require "lspconfig"
-  local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist" }
+  local servers = { "html", "cssls", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist", "omnisharp" }
 
   vim.lsp.inlay_hint.enable()
   vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
