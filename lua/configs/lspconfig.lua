@@ -24,7 +24,11 @@ M.defaults = function()
     }
   end
   lspconfig.omnisharp.setup {
-    cmd = { "/home/naps62/share/mason/bin/omnisharp-mono" },
+    cmd = { "/home/naps62/.local/share/nvim/mason/bin/omnisharp-mono" },
+    on_attach = M.on_attach,
+    on_init = nvlsp.on_init,
+    capabilities = nvlsp.capabilities,
+    inlay_hints = { enable = true },
   }
 end
 
