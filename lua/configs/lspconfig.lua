@@ -58,20 +58,20 @@ end
 
 M.rustacean = {
   server = {
-    cmd = function()
-      return { "/home/naps62/.cargo/bin/rust-analyzer", "--target-dir", "/target.rust-analyzer" }
-    end,
+    -- cmd = function()
+    --   return { "ra-multiplex" }
+    -- end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
     default_settings = {
       ["rust-analyzer"] = {
         checkOnSave = {
           command = "clippy",
-          targetDir = "/target.rust-analyzer",
+          targetDir = true,
         },
         cargo = {
           allFeatures = true,
-          targetDir = "/target.rust-analyzer",
+          targetDir = true,
         },
       },
     },
