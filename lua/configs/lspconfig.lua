@@ -59,7 +59,7 @@ end
 M.rustacean = {
   server = {
     cmd = function()
-      return { "rust-analyzer", "--target-dir", "/target.rust-analyzer" }
+      return { "/home/naps62/.cargo/bin/rust-analyzer", "--target-dir", "/target.rust-analyzer" }
     end,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
