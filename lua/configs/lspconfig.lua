@@ -67,10 +67,10 @@ M.rustacean = {
       ["rust-analyzer"] = {
         checkOnSave = {
           command = "clippy",
-          extraArgs = { "--target-dir", "/target.rust-analyzer" },
         },
         cargo = {
           allFeatures = true,
+          targetDir = "/target.rust-analyzer",
         },
       },
     },
