@@ -3,11 +3,6 @@ local M = {}
 local nvlsp = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 
--- vim.diagnostic.config {
---   virtual_text = false,
---   virtual_lines = { current_line = true },
--- }
-
 M.defaults = function()
   -- load defaults i.e lua_lsp
   require("nvchad.configs.lspconfig").defaults()

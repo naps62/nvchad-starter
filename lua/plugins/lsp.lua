@@ -26,11 +26,11 @@ return {
   },
 
   -- lazy.nvim
-  -- {
-  --   "chrisgrieser/nvim-lsp-endhints",
-  --   event = "LspAttach",
-  --   opts = {}, -- required, even if empty
-  -- },
+  {
+    "chrisgrieser/nvim-lsp-endhints",
+    event = "LspAttach",
+    opts = {}, -- required, even if empty
+  },
 
   {
     "aznhe21/actions-preview.nvim",
