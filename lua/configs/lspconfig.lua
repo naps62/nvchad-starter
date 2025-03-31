@@ -19,8 +19,8 @@ M.defaults = function()
   vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
     border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
   })
-  -- vim.lsp.handlers["textDocument/publishDiagnostic"] =
-  --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
+  vim.lsp.handlers["textDocument/publishDiagnostic"] =
+    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
