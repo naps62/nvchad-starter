@@ -44,12 +44,14 @@ return {
         "]q",
         function()
           require("trouble").next()
+          require("trouble").jump()
         end,
       },
       {
         "[q",
         function()
           require("trouble").prev()
+          require("trouble").jump()
         end,
       },
     },
