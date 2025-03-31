@@ -3,10 +3,10 @@ local M = {}
 local nvlsp = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 
-vim.diagnostic.config {
-  virtual_text = false,
-  virtual_lines = { current_line = true },
-}
+-- vim.diagnostic.config {
+--   virtual_text = false,
+--   virtual_lines = { current_line = true },
+-- }
 
 M.defaults = function()
   -- load defaults i.e lua_lsp
@@ -30,6 +30,11 @@ M.defaults = function()
       inlay_hints = { enable = true },
     }
   end
+
+  vim.diagnostic.config {
+    virtual_text = false,
+    virtual_lines = { current_line = true },
+  }
 end
 
 M.on_attach = function(client, bufnr)
@@ -86,11 +91,6 @@ M.rustacean = {
       --   vim.cmd.RustLsp "codeAction"
       -- end, opts "Rust Code Actions")
     end,
-  },
-  handlers = {
-    ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = false,
-    }),
   },
   tools = {
     float_win_config = {
