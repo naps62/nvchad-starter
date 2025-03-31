@@ -3,7 +3,7 @@ local configs = require "configs.lspconfig"
 vim.g.rustaceanvim = configs.rustacean
 
 vim.diagnostic.config {
-  virtual_lines = true,
+  virtual_lines = { current_line = true },
 }
 
 return {
