@@ -43,15 +43,15 @@ return {
       {
         "]q",
         function()
-          require("trouble").next()
-          require("trouble").jump()
+          require("trouble").next "diagnostics"
+          require("trouble").jump "diagnostics"
         end,
       },
       {
         "[q",
         function()
-          require("trouble").prev()
-          require("trouble").jump()
+          require("trouble").prev "diagnostics"
+          require("trouble").jump "diagnostics"
         end,
       },
     },
