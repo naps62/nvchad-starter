@@ -41,14 +41,14 @@ return {
         desc = "Quickfix List (Trouble)",
       },
       {
-        "]q",
+        "<leader>dn",
         function()
           require("trouble").next "diagnostics"
           require("trouble").jump "diagnostics"
         end,
       },
       {
-        "[q",
+        "<leader>dp",
         function()
           require("trouble").prev "diagnostics"
           require("trouble").jump "diagnostics"
