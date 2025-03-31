@@ -3,6 +3,11 @@ local M = {}
 local nvlsp = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 
+vim.diagnostic.config {
+  virtual_text = false,
+  virtual_lines = { current_line = true },
+}
+
 M.defaults = function()
   -- load defaults i.e lua_lsp
   require("nvchad.configs.lspconfig").defaults()
@@ -14,6 +19,8 @@ M.defaults = function()
   vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
     border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
   })
+  -- vim.lsp.handlers["textDocument/publishDiagnostic"] =
+  --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {

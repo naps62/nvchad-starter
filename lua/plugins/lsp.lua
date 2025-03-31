@@ -2,10 +2,6 @@ local configs = require "configs.lspconfig"
 
 vim.g.rustaceanvim = configs.rustacean
 
-vim.diagnostic.config {
-  virtual_lines = { current_line = true },
-}
-
 return {
   {
     "neovim/nvim-lspconfig",
