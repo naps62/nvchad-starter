@@ -19,7 +19,7 @@ M.defaults = function()
   vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
     border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
   })
-  vim.lsp.handlers["textDocument/publishDiagnostic"] =
+  vim.lsp.handlers["textDocument/publishDiagnostics"] =
     vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
   for _, lsp in ipairs(servers) do
@@ -30,13 +30,6 @@ M.defaults = function()
       inlay_hints = { enable = true },
     }
   end
-  lspconfig.omnisharp.setup {
-    cmd = { "/home/naps62/.local/share/nvim/mason/bin/omnisharp-mono" },
-    on_attach = M.on_attach,
-    on_init = nvlsp.on_init,
-    capabilities = nvlsp.capabilities,
-    inlay_hints = { enable = true },
-  }
 end
 
 M.on_attach = function(client, bufnr)
@@ -57,10 +50,6 @@ M.on_attach = function(client, bufnr)
   map("n", "gr", function()
     require("telescope.builtin").lsp_references()
   end, opts "LSP References")
-
-  -- map("n", "ga", function()
-  --   vim.lsp.buf.code_action { async = true }
-  -- end, opts "Code Actions")
 end
 
 M.rustacean = {
@@ -122,7 +111,6 @@ M.typescript = {
     end,
   },
   handlers = {
-
     ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
       virtual_text = false,
     }),
