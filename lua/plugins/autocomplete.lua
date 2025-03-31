@@ -70,6 +70,7 @@ return {
 
   {
     "joshuavial/aider.nvim",
+    event = "VeryLazy",
     opts = {
       auto_manage_context = true,
       default_bindings = true,
