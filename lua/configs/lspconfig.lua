@@ -87,6 +87,11 @@ M.rustacean = {
       -- end, opts "Rust Code Actions")
     end,
   },
+  handlers = {
+    ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+      virtual_text = false,
+    }),
+  },
   tools = {
     float_win_config = {
       border = "rounded",
