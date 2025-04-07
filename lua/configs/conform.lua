@@ -10,6 +10,7 @@ local options = {
     toml = { "taplo" },
     typst = { "typstyle" },
     csharp = { "csharpier" },
+    elixir = { "mix" },
   },
   formatters = {
     biome = { require_cwd = true },
