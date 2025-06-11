@@ -30,6 +30,7 @@ return {
         "elixir",
         "erlang",
         "eex",
+        "heex",
         "kdl",
         "yuck",
         "sql",

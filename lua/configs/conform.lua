@@ -11,6 +11,7 @@ local options = {
     typst = { "typstyle" },
     csharp = { "csharpier" },
     elixir = { "mix" },
+    cpp = { "clang-format" },
   },
   formatters = {
     biome = { require_cwd = true },
