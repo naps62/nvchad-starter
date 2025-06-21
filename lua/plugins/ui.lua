@@ -36,7 +36,8 @@ return {
     main = "ibl",
     config = function()
       require("ibl").setup {
-        scope = { include = { language = { "yaml" } } },
+        indent = { char = "|" },
+        scope = { exclude = { language = {} } },
       }
     end,
   },
