@@ -30,15 +30,4 @@ return {
       }
     end,
   },
-
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    config = function()
-      require("ibl").setup {
-        indent = { char = "|" },
-        scope = { exclude = { language = {} } },
-      }
-    end,
-  },
 }
