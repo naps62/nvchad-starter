@@ -60,10 +60,8 @@ M.rustacean = {
     capabilities = nvlsp.capabilities,
     default_settings = {
       ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy",
-          targetDir = true,
-        },
+        check = { command = "clippy" },
+        checkOnSave = true,
         cargo = {
           allFeatures = true,
           targetDir = true,
