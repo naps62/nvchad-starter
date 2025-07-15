@@ -31,27 +31,4 @@ return {
     event = "LspAttach",
     opts = {}, -- required, even if empty
   },
-
-  {
-    "aznhe21/actions-preview.nvim",
-    config = function()
-      local hl = require "actions-preview.highlight"
-      require("actions-preview").setup {
-        backend = { "nui" },
-        highlight_command = { hl.delta() },
-
-        nui = {
-          keymap = { "q", "<C-c>" },
-        },
-      }
-    end,
-    keys = {
-      {
-        "ga",
-        function()
-          require("actions-preview").code_actions()
-        end,
-      },
-    },
-  },
 }

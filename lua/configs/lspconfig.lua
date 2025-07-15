@@ -79,9 +79,9 @@ M.rustacean = {
         return { buffer = bufnr, desc = "LSP " .. desc }
       end
 
-      -- map("n", "ga", function()
-      --   vim.cmd.RustLsp "codeAction"
-      -- end, opts "Rust Code Actions")
+      map("n", "ga", function()
+        vim.cmd.RustLsp "codeAction"
+      end, opts "Rust Code Actions")
     end,
   },
   tools = {
