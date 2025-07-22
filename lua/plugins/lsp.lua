@@ -44,7 +44,9 @@ return {
       -- { "folke/snacks.nvim", opts = { terminal = {} } },
     },
     event = "LspAttach",
-    opts = {},
+    opts = {
+      picker = "buffer",
+    },
     keys = {
       {
         "ga",
