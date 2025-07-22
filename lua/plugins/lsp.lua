@@ -45,8 +45,8 @@ return {
     },
     event = "LspAttach",
     opts = {
+      backend = "delta",
       picker = {
-        backend = "delta",
         "buffer",
         opts = {
           hotkeys = true,
