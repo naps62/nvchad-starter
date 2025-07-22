@@ -31,4 +31,50 @@ return {
     event = "LspAttach",
     opts = {}, -- required, even if empty
   },
+
+  {
+    "rachartier/tiny-code-action.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      -- optional picker via telescope
+      { "nvim-telescope/telescope.nvim" },
+      -- optional picker via fzf-lua
+      -- { "ibhagwan/fzf-lua" },
+      -- .. or via snacks
+      -- { "folke/snacks.nvim", opts = { terminal = {} } },
+    },
+    event = "LspAttach",
+    opts = {},
+    keys = {
+      {
+        "ga",
+        function()
+          require("tiny-code-actions").code_action()
+        end,
+      },
+    },
+  },
+
+  -- {
+  --   "aznhe21/actions-preview.nvim",
+  --   config = function()
+  --     local hl = require "actions-preview.highlight"
+  --     require("actions-preview").setup {
+  --       backend = { "nui" },
+  --       highlight_command = { hl.delta() },
+  --
+  --       nui = {
+  --         keymap = { "q", "<C-c>" },
+  --       },
+  --     }
+  --   end,
+  --   keys = {
+  --     {
+  --       "ga",
+  --       function()
+  --         require("actions-preview").code_actions()
+  --       end,
+  --     },
+  --   },
+  -- },
 }
