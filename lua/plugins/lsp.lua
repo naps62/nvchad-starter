@@ -45,7 +45,15 @@ return {
     },
     event = "LspAttach",
     opts = {
-      picker = { backend = "delta", "buffer", opts = { hotkeys = true, auto_accept = true } },
+      picker = {
+        backend = "delta",
+        "buffer",
+        opts = {
+          hotkeys = true,
+          auto_preview = true,
+          auto_accept = true,
+        },
+      },
     },
     keys = {
       {
