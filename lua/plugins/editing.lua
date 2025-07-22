@@ -1,18 +1,18 @@
 return {
-  -- {
-  --   "m4xshen/hardtime.nvim",
-  --   lazy = false,
-  --   dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-  --   opts = {
-  --     disable_mouse = false,
-  --     restricted_keys = {
-  --       ["w"] = { "n", "x" },
-  --       ["W"] = { "n", "x" },
-  --       ["b"] = { "n", "x" },
-  --       ["B"] = { "n", "x" },
-  --     },
-  --   },
-  -- },
+  {
+    "m4xshen/hardtime.nvim",
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {
+      disable_mouse = false,
+      restricted_keys = {
+        ["w"] = { "n", "x" },
+        ["W"] = { "n", "x" },
+        ["b"] = { "n", "x" },
+        ["B"] = { "n", "x" },
+      },
+    },
+  },
 
   {
     "smoka7/hop.nvim",
