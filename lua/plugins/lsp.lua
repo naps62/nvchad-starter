@@ -45,7 +45,7 @@ return {
     },
     event = "LspAttach",
     opts = {
-      picker = { "buffer", opts = { hotkeys = true, auto_preview = true } },
+      picker = { "buffer", opts = { hotkeys = true, auto_preview = true, auto_accept = true } },
     },
     keys = {
       {
