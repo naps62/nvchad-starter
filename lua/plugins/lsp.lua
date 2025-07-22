@@ -49,7 +49,7 @@ return {
       {
         "ga",
         function()
-          require("tiny-code-actions").code_action()
+          require("tiny-code-action").code_action()
         end,
       },
     },
