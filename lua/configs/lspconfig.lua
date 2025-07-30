@@ -66,6 +66,9 @@ M.rustacean = {
           allFeatures = true,
           targetDir = true,
         },
+        diagnostics = {
+          disabled = { "inactive-code" },
+        },
       },
     },
     on_attach = function(client, bufnr)
