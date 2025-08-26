@@ -49,10 +49,6 @@ return {
       textobjects = {
         lsp_interop = {
           enable = true,
-          peek_definition_code = {
-            ["df"] = "@function.outer",
-            ["dc"] = "@class.outer",
-          },
         },
         select = {
           enable = true,
