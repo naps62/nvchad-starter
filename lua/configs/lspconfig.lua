@@ -63,21 +63,16 @@ M.rustacean = {
         check = { command = "clippy" },
         checkOnSave = true,
         cargo = {
-          allFeatures = true,
           targetDir = true,
           extraArgs = { "--edition=2024" },
         },
         diagnostics = {
-          disabled = { "inactive-code" },
+          disabled = { "inactive-code", "macro-error" },
         },
       },
     },
     on_attach = function(client, bufnr)
       M.on_attach(client, bufnr)
-
-      map("n", "re", function()
-        vim.cmd.RustLsp "expandMacro"
-      end)
 
       local function opts(desc)
         return { buffer = bufnr, desc = "LSP " .. desc }
