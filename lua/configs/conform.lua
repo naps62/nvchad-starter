@@ -16,7 +16,7 @@ local options = {
   formatters = {
     biome = { require_cwd = true },
     rustfmt = {
-      args = { "--edition", "2024", "--emit=stdout", "--stdin" },
+      args = { "--edition", "2024" },
     },
   },
 
