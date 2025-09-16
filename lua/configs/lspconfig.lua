@@ -65,6 +65,7 @@ M.rustacean = {
         cargo = {
           allFeatures = true,
           targetDir = true,
+          extraArgs = { "--edition=2024" },
         },
         diagnostics = {
           disabled = { "inactive-code" },
