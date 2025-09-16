@@ -1,10 +1,10 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    rust = { "rustfmt", lsp_format = "fallback" },
-    javascript = { "biome" },
-    typescript = { "biome" },
-    yaml = { "biome" },
+    rust = { "rustfmt", require_cwd = true },
+    javascript = { "biome-check" },
+    typescript = { "biome-check" },
+    yaml = { "biome-check" },
     solidity = { "forge_fmt" },
     nix = { "nixfmt" },
     toml = { "taplo" },
