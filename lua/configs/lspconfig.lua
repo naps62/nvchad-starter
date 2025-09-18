@@ -18,7 +18,7 @@ M.defaults = function()
     vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
   for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
+    lspconfig(lsp, {
       on_attach = M.on_attach,
       on_init = nvlsp.on_init,
       capabilities = nvlsp.capabilities,
