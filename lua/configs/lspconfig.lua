@@ -11,11 +11,12 @@ M.defaults = function()
   local servers = { "html", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist" }
 
   vim.lsp.inlay_hint.enable()
-  vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(vim.lsp.handlers.hover, {
-    border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
-  })
-  vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
+  -- vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.handlers.code_action
+  --   border = "rounded", -- You can also use 'single', 'double', 'solid', etc.
+  -- })
+  -- vim.diagnostic.config { virtual_text = true }
+  -- vim.lsp.handlers["textDocument/publishDiagnostics"] =
+  --   vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
 
   for _, lsp in ipairs(servers) do
     lspconfig(lsp, {
@@ -107,9 +108,7 @@ M.typescript = {
     end,
   },
   handlers = {
-    ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = false,
-    }),
+    ["textDocument/publishDiagnostics"] = vim.diagnostic.config { virtual_text = false },
   },
 }
 
