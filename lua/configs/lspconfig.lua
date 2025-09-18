@@ -23,7 +23,7 @@ M.defaults = function()
       on_init = nvlsp.on_init,
       capabilities = nvlsp.capabilities,
       inlay_hints = { enable = true },
-    }
+    })
   end
 
   vim.diagnostic.config {
