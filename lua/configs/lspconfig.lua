@@ -7,7 +7,7 @@ M.defaults = function()
   -- load defaults i.e lua_lsp
   require("nvchad.configs.lspconfig").defaults()
 
-  local lspconfig = require "lspconfig"
+  local lspconfig = vim.lsp.config
   local servers = { "html", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist" }
 
   vim.lsp.inlay_hint.enable()
