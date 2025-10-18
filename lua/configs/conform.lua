@@ -3,7 +3,7 @@ local options = {
     lua = { "stylua" },
     rust = { "rustfmt", require_cwd = true },
     javascript = { "biome-check" },
-    typescript = { "biome-check" },
+    typescript = { "biome-check", "biome", "biome-organize-imports" },
     yaml = { "biome-check" },
     solidity = { "forge_fmt" },
     nix = { "nixfmt" },
