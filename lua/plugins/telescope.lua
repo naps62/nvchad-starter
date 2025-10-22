@@ -5,6 +5,7 @@ return {
     dependencies = { "nvim-treesitter/nvim-treesitter", "cljoly/telescope-repo.nvim" },
     cmd = "Telescope",
     config = function()
+      ---@diagnostic disable-next-line: different-requires
       require("telescope").setup(require "configs.telescope")
       require("telescope").load_extension "repo"
     end,

@@ -7,19 +7,40 @@ M.defaults = function()
   -- load defaults i.e lua_lsp
   require("nvchad.configs.lspconfig").defaults()
 
-  local lspconfig = vim.lsp.config
-  local servers = { "html", "lua_ls", "biome", "solidity_ls_nomicfoundation", "tinymist" }
-
   vim.lsp.inlay_hint.enable()
 
-  for _, lsp in ipairs(servers) do
-    lspconfig(lsp, {
-      on_attach = M.on_attach,
-      on_init = nvlsp.on_init,
-      capabilities = nvlsp.capabilities,
-      inlay_hints = { enable = true },
-    })
-  end
+  vim.lsp.config("biome", {
+    cmd = {
+      -- prefer local binary if exists
+      vim.fn.filereadable "./node_modules/.bin/biome" == 1 and "./node_modules/.bin/biome" or "biome",
+      "lsp-proxy",
+    },
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "json", "jsonc" },
+    root_dir = vim.fs.root(0, { "biome.json", "biome.jsonc", "biome.config.ts", "package.json", ".git" }),
+    settings = {}, -- add Biome-specific settings if needed
+    ---@diagnostic disable-next-line: unused-local
+    on_attach = function(client, _bufnr)
+      -- disable formatting if you want Conform or another tool to handle formatting
+      client.server_capabilities.documentFormattingProvider = false
+    end,
+  })
+  vim.lsp.enable "biome"
+
+  vim.lsp.config("lua_ls", {
+    on_attach = M.on_attach,
+    on_init = nvlsp.on_init,
+    capabilities = nvlsp.capabilities,
+    inlay_hints = { enable = true },
+  })
+  vim.lsp.enable "lua_ls"
+
+  vim.lsp.config("solidity_ls_nomicfoundation", {
+    on_attach = M.on_attach,
+    on_init = nvlsp.on_init,
+    capabilities = nvlsp.capabilities,
+    inlay_hints = { enable = true },
+  })
+  vim.lsp.enable "solidity_ls_nomicfoundation"
 
   vim.diagnostic.config {
     signs = {
