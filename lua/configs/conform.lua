@@ -11,6 +11,7 @@ local options = {
     toml = { "taplo" },
     elixir = { "mix" },
     cpp = { "clang-format" },
+    kotlin = { "ktlint" },
   },
   formatters = {
     biome = { require_cwd = true },
