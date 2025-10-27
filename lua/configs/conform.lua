@@ -27,7 +27,8 @@ local options = {
     end
 
     return {
-      timeout_ms = 500,
+      async = true,
+      timeout_ms = 1000,
       lsp_format = "fallback",
     }
   end,
