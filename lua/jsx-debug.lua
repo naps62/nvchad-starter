@@ -7,6 +7,7 @@ local current_debug_element = {
   start_col = nil,
   end_row = nil,
   end_col = nil,
+  has_debug = false, -- Track if we added debug to this element
 }
 
 -- Check if the current filetype is JSX/TSX
@@ -140,8 +141,16 @@ local function add_debug_class(bufnr, class_attr, element_node)
       text = text:sub(2, -2)
     end
 
-    -- Check if "debug" is already there
-    if text:match("debug") then
+    -- Check if "debug" is already there (as a whole word)
+    local has_debug = false
+    for word in text:gmatch("%S+") do
+      if word == "debug" then
+        has_debug = true
+        break
+      end
+    end
+
+    if has_debug then
       return false
     end
 
@@ -197,13 +206,27 @@ local function remove_debug_class(bufnr, class_attr)
     text = text:sub(2, -2)
   end
 
-  -- Check if "debug" is present
-  if not text:match("debug") then
+  -- Check if "debug" is present (as a whole word)
+  local has_debug = false
+  for word in text:gmatch("%S+") do
+    if word == "debug" then
+      has_debug = true
+      break
+    end
+  end
+
+  if not has_debug then
     return false
   end
 
-  -- Remove "debug" from the className
-  local new_text = text:gsub("%s*debug%s*", " "):gsub("^%s+", ""):gsub("%s+$", "")
+  -- Remove "debug" from the className (as a whole word)
+  local classes = {}
+  for word in text:gmatch("%S+") do
+    if word ~= "debug" then
+      table.insert(classes, word)
+    end
+  end
+  local new_text = table.concat(classes, " ")
 
   -- If className becomes empty, remove the entire attribute
   if new_text == "" then
@@ -223,6 +246,42 @@ local function remove_debug_class(bufnr, class_attr)
   return true
 end
 
+-- Remove debug from the previously tracked element
+local function cleanup_previous_element()
+  if not current_debug_element.bufnr or not current_debug_element.has_debug then
+    return
+  end
+
+  -- Re-parse to get fresh tree after potential modifications
+  local parser = vim.treesitter.get_parser(current_debug_element.bufnr)
+  if not parser then
+    return
+  end
+
+  local tree = parser:parse()[1]
+  if not tree then
+    return
+  end
+
+  local root = tree:root()
+  local prev_elem_node = root:named_descendant_for_range(
+    current_debug_element.start_row,
+    current_debug_element.start_col,
+    current_debug_element.start_row,
+    current_debug_element.start_col
+  )
+
+  if prev_elem_node then
+    local prev_jsx_element = find_jsx_element(prev_elem_node)
+    if prev_jsx_element then
+      local _, prev_class_attr = should_debug_element(prev_jsx_element)
+      if remove_debug_class(current_debug_element.bufnr, prev_class_attr) then
+        vim.cmd("silent! write")
+      end
+    end
+  end
+end
+
 -- Main cursor handler
 local function on_cursor_moved()
   if not is_jsx_file() then
@@ -239,47 +298,18 @@ local function on_cursor_moved()
     -- Get element position
     local start_row, start_col, end_row, end_col = element_node:range()
 
-    -- Check if we're on the same element
+    -- Check if we're on the same element (approximately, allowing for small shifts)
     local same_element = current_debug_element.bufnr == bufnr
       and current_debug_element.start_row == start_row
-      and current_debug_element.start_col == start_col
-      and current_debug_element.end_row == end_row
-      and current_debug_element.end_col == end_col
+      and math.abs(current_debug_element.start_col - start_col) <= 20 -- Allow some tolerance
 
     if not same_element then
-      -- Remove debug from previous element
-      if current_debug_element.bufnr then
-        local prev_node = get_node_at_cursor()
-        local prev_element = find_jsx_element(prev_node)
-        local _, prev_class_attr = should_debug_element(prev_element)
-
-        -- Re-parse to get fresh tree
-        local parser = vim.treesitter.get_parser(current_debug_element.bufnr)
-        if parser then
-          local tree = parser:parse()[1]
-          if tree then
-            local root = tree:root()
-            local prev_elem_node = root:named_descendant_for_range(
-              current_debug_element.start_row,
-              current_debug_element.start_col,
-              current_debug_element.start_row,
-              current_debug_element.start_col
-            )
-            if prev_elem_node then
-              local prev_jsx_element = find_jsx_element(prev_elem_node)
-              if prev_jsx_element then
-                _, prev_class_attr = should_debug_element(prev_jsx_element)
-                if remove_debug_class(current_debug_element.bufnr, prev_class_attr) then
-                  vim.cmd("silent! write")
-                end
-              end
-            end
-          end
-        end
-      end
+      -- Clean up previous element
+      cleanup_previous_element()
 
       -- Add debug to new element
-      if add_debug_class(bufnr, class_attr, element_node) then
+      local did_add = add_debug_class(bufnr, class_attr, element_node)
+      if did_add then
         vim.cmd("silent! write")
       end
 
@@ -290,42 +320,22 @@ local function on_cursor_moved()
         start_col = start_col,
         end_row = end_row,
         end_col = end_col,
+        has_debug = did_add,
       }
     end
   else
     -- Not on a debuggable element, remove debug from previous
-    if current_debug_element.bufnr then
-      local parser = vim.treesitter.get_parser(current_debug_element.bufnr)
-      if parser then
-        local tree = parser:parse()[1]
-        if tree then
-          local root = tree:root()
-          local prev_elem_node = root:named_descendant_for_range(
-            current_debug_element.start_row,
-            current_debug_element.start_col,
-            current_debug_element.start_row,
-            current_debug_element.start_col
-          )
-          if prev_elem_node then
-            local prev_jsx_element = find_jsx_element(prev_elem_node)
-            if prev_jsx_element then
-              local _, prev_class_attr = should_debug_element(prev_jsx_element)
-              if remove_debug_class(current_debug_element.bufnr, prev_class_attr) then
-                vim.cmd("silent! write")
-              end
-            end
-          end
-        end
-      end
+    cleanup_previous_element()
 
-      current_debug_element = {
-        bufnr = nil,
-        start_row = nil,
-        start_col = nil,
-        end_row = nil,
-        end_col = nil,
-      }
-    end
+    -- Reset tracking
+    current_debug_element = {
+      bufnr = nil,
+      start_row = nil,
+      start_col = nil,
+      end_row = nil,
+      end_col = nil,
+      has_debug = false,
+    }
   end
 end
 
@@ -344,40 +354,15 @@ function M.setup()
   vim.api.nvim_create_autocmd("BufLeave", {
     pattern = { "*.jsx", "*.tsx", "*.js", "*.ts" },
     callback = function()
-      if current_debug_element.bufnr then
-        local bufnr = vim.api.nvim_get_current_buf()
-        if current_debug_element.bufnr == bufnr then
-          local parser = vim.treesitter.get_parser(bufnr)
-          if parser then
-            local tree = parser:parse()[1]
-            if tree then
-              local root = tree:root()
-              local elem_node = root:named_descendant_for_range(
-                current_debug_element.start_row,
-                current_debug_element.start_col,
-                current_debug_element.start_row,
-                current_debug_element.start_col
-              )
-              if elem_node then
-                local jsx_element = find_jsx_element(elem_node)
-                if jsx_element then
-                  local _, class_attr = should_debug_element(jsx_element)
-                  if remove_debug_class(bufnr, class_attr) then
-                    vim.cmd("silent! write")
-                  end
-                end
-              end
-            end
-          end
-          current_debug_element = {
-            bufnr = nil,
-            start_row = nil,
-            start_col = nil,
-            end_row = nil,
-            end_col = nil,
-          }
-        end
-      end
+      cleanup_previous_element()
+      current_debug_element = {
+        bufnr = nil,
+        start_row = nil,
+        start_col = nil,
+        end_row = nil,
+        end_col = nil,
+        has_debug = false,
+      }
     end,
   })
 end
