@@ -298,10 +298,9 @@ local function on_cursor_moved()
     -- Get element position
     local start_row, start_col, end_row, end_col = element_node:range()
 
-    -- Check if we're on the same element (approximately, allowing for small shifts)
+    -- Check if we're on the same element (use row as primary identifier)
     local same_element = current_debug_element.bufnr == bufnr
       and current_debug_element.start_row == start_row
-      and math.abs(current_debug_element.start_col - start_col) <= 20 -- Allow some tolerance
 
     if not same_element then
       -- Clean up previous element
@@ -311,17 +310,43 @@ local function on_cursor_moved()
       local did_add = add_debug_class(bufnr, class_attr, element_node)
       if did_add then
         vim.cmd("silent! write")
-      end
 
-      -- Update current element
-      current_debug_element = {
-        bufnr = bufnr,
-        start_row = start_row,
-        start_col = start_col,
-        end_row = end_row,
-        end_col = end_col,
-        has_debug = did_add,
-      }
+        -- Re-parse tree to get updated positions after adding debug
+        vim.schedule(function()
+          local parser = vim.treesitter.get_parser(bufnr)
+          if parser then
+            local tree = parser:parse()[1]
+            if tree then
+              local cursor = vim.api.nvim_win_get_cursor(0)
+              local row = cursor[1] - 1
+              local col = cursor[2]
+              local updated_node = tree:root():named_descendant_for_range(row, col, row, col)
+              local updated_element = find_jsx_element(updated_node)
+              if updated_element then
+                local new_start_row, new_start_col, new_end_row, new_end_col = updated_element:range()
+                current_debug_element = {
+                  bufnr = bufnr,
+                  start_row = new_start_row,
+                  start_col = new_start_col,
+                  end_row = new_end_row,
+                  end_col = new_end_col,
+                  has_debug = true,
+                }
+              end
+            end
+          end
+        end)
+      else
+        -- Debug was already there, just update tracking
+        current_debug_element = {
+          bufnr = bufnr,
+          start_row = start_row,
+          start_col = start_col,
+          end_row = end_row,
+          end_col = end_col,
+          has_debug = false, -- We didn't add it
+        }
+      end
     end
   else
     -- Not on a debuggable element, remove debug from previous
@@ -339,21 +364,36 @@ local function on_cursor_moved()
   end
 end
 
+-- Debounce timer
+local timer = nil
+
 -- Setup function
 function M.setup()
   -- Create autocmd for cursor movement in JSX/TSX files
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    pattern = { "*.jsx", "*.tsx", "*.js", "*.ts" },
     callback = function()
+      if not is_jsx_file() then
+        return
+      end
+
       -- Debounce to avoid too frequent calls
-      vim.defer_fn(on_cursor_moved, 50)
+      if timer then
+        vim.fn.timer_stop(timer)
+      end
+      timer = vim.fn.timer_start(100, function()
+        on_cursor_moved()
+        timer = nil
+      end)
     end,
   })
 
   -- Also handle buffer leave to clean up
   vim.api.nvim_create_autocmd("BufLeave", {
-    pattern = { "*.jsx", "*.tsx", "*.js", "*.ts" },
     callback = function()
+      if timer then
+        vim.fn.timer_stop(timer)
+        timer = nil
+      end
       cleanup_previous_element()
       current_debug_element = {
         bufnr = nil,
