@@ -1,5 +1,24 @@
 local M = {}
 
+-- Debug logging
+local log_file = "/tmp/jsx-debug.log"
+local function log(msg)
+  local f = io.open(log_file, "a")
+  if f then
+    f:write(os.date("[%H:%M:%S] ") .. msg .. "\n")
+    f:close()
+  end
+end
+
+-- Clear log on init
+local function clear_log()
+  local f = io.open(log_file, "w")
+  if f then
+    f:write("=== JSX Debug Plugin Log ===\n")
+    f:close()
+  end
+end
+
 -- Track the current element being debugged
 local current_debug_element = {
   bufnr = nil,
@@ -129,6 +148,7 @@ local function add_debug_class(bufnr, class_attr, element_node)
     -- className exists, add "debug" to it
     local value_node = get_classname_value_node(class_attr)
     if not value_node then
+      log("  add_debug_class: No value node found")
       return false
     end
 
@@ -141,6 +161,8 @@ local function add_debug_class(bufnr, class_attr, element_node)
       text = text:sub(2, -2)
     end
 
+    log("  add_debug_class: className exists with value: '" .. text .. "'")
+
     -- Check if "debug" is already there (as a whole word)
     local has_debug = false
     for word in text:gmatch("%S+") do
@@ -151,6 +173,7 @@ local function add_debug_class(bufnr, class_attr, element_node)
     end
 
     if has_debug then
+      log("  add_debug_class: 'debug' already present, skipping")
       return false
     end
 
@@ -160,11 +183,14 @@ local function add_debug_class(bufnr, class_attr, element_node)
       new_text = '"' .. new_text .. '"'
     end
 
+    log("  add_debug_class: Adding 'debug', new value: '" .. new_text .. "'")
+
     -- Replace the text
     vim.api.nvim_buf_set_text(bufnr, start_row, start_col, end_row, end_col, { new_text })
     return true
   else
     -- className doesn't exist, add it
+    log("  add_debug_class: No className found, creating new one")
     -- Find the position to insert (after the tag name)
     local tag_name_node = nil
     for child in element_node:iter_children() do
@@ -175,11 +201,14 @@ local function add_debug_class(bufnr, class_attr, element_node)
     end
 
     if not tag_name_node then
+      log("  add_debug_class: No tag name node found")
       return false
     end
 
     local _, _, end_row, end_col = tag_name_node:range()
     local new_text = ' className="debug"'
+
+    log("  add_debug_class: Creating className=\"debug\" at row " .. end_row)
 
     vim.api.nvim_buf_set_text(bufnr, end_row, end_col, end_row, end_col, { new_text })
     return true
@@ -189,11 +218,13 @@ end
 -- Remove "debug" from className
 local function remove_debug_class(bufnr, class_attr)
   if not class_attr then
+    log("  remove_debug_class: No class_attr provided")
     return false
   end
 
   local value_node = get_classname_value_node(class_attr)
   if not value_node then
+    log("  remove_debug_class: No value node found")
     return false
   end
 
@@ -206,6 +237,8 @@ local function remove_debug_class(bufnr, class_attr)
     text = text:sub(2, -2)
   end
 
+  log("  remove_debug_class: className value: '" .. text .. "'")
+
   -- Check if "debug" is present (as a whole word)
   local has_debug = false
   for word in text:gmatch("%S+") do
@@ -216,6 +249,7 @@ local function remove_debug_class(bufnr, class_attr)
   end
 
   if not has_debug then
+    log("  remove_debug_class: 'debug' not found, skipping")
     return false
   end
 
@@ -228,8 +262,11 @@ local function remove_debug_class(bufnr, class_attr)
   end
   local new_text = table.concat(classes, " ")
 
+  log("  remove_debug_class: Removing 'debug', new value: '" .. new_text .. "'")
+
   -- If className becomes empty, remove the entire attribute
   if new_text == "" then
+    log("  remove_debug_class: className empty, removing entire attribute")
     local attr_start_row, attr_start_col, attr_end_row, attr_end_col = class_attr:range()
     -- Also remove the space before className if present
     if attr_start_col > 0 then
@@ -248,18 +285,26 @@ end
 
 -- Remove debug from the previously tracked element
 local function cleanup_previous_element()
+  log("cleanup_previous_element: Called")
+  log("  has_debug=" .. tostring(current_debug_element.has_debug))
+  log("  bufnr=" .. tostring(current_debug_element.bufnr))
+  log("  start_row=" .. tostring(current_debug_element.start_row))
+
   if not current_debug_element.bufnr or not current_debug_element.has_debug then
+    log("  Skipping cleanup (no bufnr or we didn't add debug)")
     return
   end
 
   -- Re-parse to get fresh tree after potential modifications
   local parser = vim.treesitter.get_parser(current_debug_element.bufnr)
   if not parser then
+    log("  No parser available")
     return
   end
 
   local tree = parser:parse()[1]
   if not tree then
+    log("  No tree available")
     return
   end
 
@@ -272,19 +317,29 @@ local function cleanup_previous_element()
   )
 
   if prev_elem_node then
+    log("  Found previous element node")
     local prev_jsx_element = find_jsx_element(prev_elem_node)
     if prev_jsx_element then
+      log("  Found previous JSX element")
       local _, prev_class_attr = should_debug_element(prev_jsx_element)
       if remove_debug_class(current_debug_element.bufnr, prev_class_attr) then
+        log("  Removed debug, saving file")
         vim.cmd("silent! write")
       end
+    else
+      log("  No JSX element found")
     end
+  else
+    log("  No previous element node found")
   end
 end
 
 -- Main cursor handler
 local function on_cursor_moved()
+  log("\n>>> on_cursor_moved: Called")
+
   if not is_jsx_file() then
+    log("  Not a JSX file, skipping")
     return
   end
 
@@ -292,27 +347,44 @@ local function on_cursor_moved()
   local node = get_node_at_cursor()
   local element_node = find_jsx_element(node)
 
+  log("  bufnr=" .. bufnr)
+  log("  element_node=" .. tostring(element_node))
+
   local should_debug, class_attr = should_debug_element(element_node)
+  log("  should_debug=" .. tostring(should_debug))
 
   if should_debug and element_node then
     -- Get element position
     local start_row, start_col, end_row, end_col = element_node:range()
+    log("  Element at row=" .. start_row .. " col=" .. start_col)
 
     -- Check if we're on the same element (use row as primary identifier)
     local same_element = current_debug_element.bufnr == bufnr
       and current_debug_element.start_row == start_row
 
+    log("  Tracked element: bufnr=" .. tostring(current_debug_element.bufnr) ..
+        " row=" .. tostring(current_debug_element.start_row) ..
+        " has_debug=" .. tostring(current_debug_element.has_debug))
+    log("  same_element=" .. tostring(same_element))
+
     if not same_element then
+      log("  Different element detected, switching...")
+
       -- Clean up previous element
       cleanup_previous_element()
 
       -- Add debug to new element
+      log("  Calling add_debug_class")
       local did_add = add_debug_class(bufnr, class_attr, element_node)
+      log("  did_add=" .. tostring(did_add))
+
       if did_add then
+        log("  Writing file after add")
         vim.cmd("silent! write")
 
         -- Re-parse tree to get updated positions after adding debug
         vim.schedule(function()
+          log("  Re-parsing tree to update positions")
           local parser = vim.treesitter.get_parser(bufnr)
           if parser then
             local tree = parser:parse()[1]
@@ -324,6 +396,7 @@ local function on_cursor_moved()
               local updated_element = find_jsx_element(updated_node)
               if updated_element then
                 local new_start_row, new_start_col, new_end_row, new_end_col = updated_element:range()
+                log("  Updated positions: row=" .. new_start_row .. " col=" .. new_start_col)
                 current_debug_element = {
                   bufnr = bufnr,
                   start_row = new_start_row,
@@ -332,11 +405,15 @@ local function on_cursor_moved()
                   end_col = new_end_col,
                   has_debug = true,
                 }
+                log("  Stored element with has_debug=true")
+              else
+                log("  WARNING: Could not find updated element")
               end
             end
           end
         end)
       else
+        log("  Debug not added (already exists), tracking element with has_debug=false")
         -- Debug was already there, just update tracking
         current_debug_element = {
           bufnr = bufnr,
@@ -347,12 +424,16 @@ local function on_cursor_moved()
           has_debug = false, -- We didn't add it
         }
       end
+    else
+      log("  Same element, no action needed")
     end
   else
+    log("  Not on a debuggable element")
     -- Not on a debuggable element, remove debug from previous
     cleanup_previous_element()
 
     -- Reset tracking
+    log("  Resetting tracking")
     current_debug_element = {
       bufnr = nil,
       start_row = nil,
@@ -362,6 +443,7 @@ local function on_cursor_moved()
       has_debug = false,
     }
   end
+  log("<<< on_cursor_moved: Done\n")
 end
 
 -- Debounce timer
@@ -369,6 +451,10 @@ local timer = nil
 
 -- Setup function
 function M.setup()
+  -- Clear log file on setup
+  clear_log()
+  log("Plugin initialized")
+
   -- Create autocmd for cursor movement in JSX/TSX files
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
     callback = function()
