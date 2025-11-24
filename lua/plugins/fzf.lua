@@ -7,7 +7,6 @@ return {
         prompt = "Fzf files>",
         git_icons = true,
         previewer = "bat",
-        path_shorten = true,
         cmd = "rg --files",
       },
     },
