@@ -9,6 +9,7 @@ return {
         previewer = "bat",
         cmd = "rg --files",
       },
+      grep = { multiline = true },
     },
     cmd = "FzfLua",
     keys = {
