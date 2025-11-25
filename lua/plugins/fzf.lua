@@ -7,7 +7,7 @@ return {
         prompt = "Fzf files>",
         git_icons = true,
         previewer = "bat",
-        cmd = "rg --files",
+        cmd = "rg --hidden --files -g '!.git'",
       },
       grep = { multiline = true },
     },
