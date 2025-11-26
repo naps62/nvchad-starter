@@ -34,6 +34,13 @@ return {
         end,
         desc = "Buffers",
       },
+      {
+        "<C-g>",
+        function()
+          require("fzf-lua").git_status({ winopts = { fullscreen = true } })
+        end,
+        desc = "Git status",
+      },
     },
   },
 }
