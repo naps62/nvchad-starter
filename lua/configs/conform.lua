@@ -20,14 +20,13 @@ local options = {
     },
   },
 
-  format_on_save = function()
+  format_after_save = function()
     local buf_path = vim.api.nvim_buf_get_name(0)
     if buf_path:find "/contrib/" then
       return nil
     end
 
     return {
-      async = true,
       timeout_ms = 1000,
       lsp_format = "fallback",
     }
