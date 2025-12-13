@@ -37,9 +37,16 @@ return {
       {
         "<C-g>",
         function()
-          require("fzf-lua").git_status({ winopts = { fullscreen = true } })
+          require("fzf-lua").git_status { winopts = { fullscreen = true } }
         end,
         desc = "Git status",
+      },
+      {
+        "<C-l><C-r>",
+        function()
+          require("fzf-lua").lsp_references()
+        end,
+        desc = "LSP References",
       },
     },
   },
