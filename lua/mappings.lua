@@ -1,5 +1,9 @@
 require "nvchad.mappings"
 
+-- remove nvim-tree mappings (using mini.files instead)
+vim.keymap.del("n", "<leader>e")
+vim.keymap.del("n", "<C-n>")
+
 -- add yours here
 
 local map = vim.keymap.set
