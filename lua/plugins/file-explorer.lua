@@ -29,7 +29,8 @@ return {
       },
     },
     config = function()
-      require("mini.files").setup {
+      local mf = require "mini.files"
+      mf.setup {
         mappings = {
           close = "q",
           go_in = "l",
@@ -61,7 +62,7 @@ return {
       local widths = { 60, 20, 10 }
 
       local ensure_center_layout = function(ev)
-        local state = MiniFiles.get_explorer_state()
+        local state = mf.get_explorer_state()
         if state == nil then
           return
         end
@@ -100,6 +101,42 @@ return {
       end
 
       vim.api.nvim_create_autocmd("User", { pattern = "MiniFilesWindowUpdate", callback = ensure_center_layout })
+
+      -- ability to open in splits
+      local map_split = function(buf_id, lhs, direction)
+        local rhs = function()
+          -- Make new window and set it as target
+          local cur_target = mf.get_explorer_state().target_window
+          local new_target = vim.api.nvim_win_call(cur_target, function()
+            vim.cmd(direction .. " split")
+            return vim.api.nvim_get_current_win()
+          end)
+
+          mf.set_target_window(new_target)
+
+          -- This intentionally doesn't act on file under cursor in favor of
+          -- explicit "go in" action (`l` / `L`). To immediately open file,
+          -- add appropriate `MiniFiles.go_in()` call instead of this comment.
+
+          mf.go_in()
+          mf.close()
+        end
+
+        -- Adding `desc` will result into `show_help` entries
+        local desc = "Split " .. direction
+        vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+      end
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "MiniFilesBufferCreate",
+        callback = function(args)
+          local buf_id = args.data.buf_id
+          -- Tweak keys to your liking
+          map_split(buf_id, "s", "belowright horizontal")
+          map_split(buf_id, "v", "belowright vertical")
+          map_split(buf_id, "t", "tab")
+        end,
+      })
     end,
   },
 }
