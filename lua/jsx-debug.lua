@@ -85,6 +85,8 @@ local function should_debug_element(element_node)
   local is_raw_html = false
   local class_attr = nil
 
+  log("  should_debug_element: checking " .. element_type)
+
   -- Check if it's a raw HTML element (lowercase tag name)
   for child in element_node:iter_children() do
     if child:type() == "identifier" or child:type() == "member_expression" then
@@ -97,33 +99,77 @@ local function should_debug_element(element_node)
     end
   end
 
-  -- Look for className attribute
+  -- Look for className attribute - log all children first
+  log("  should_debug_element: iterating children:")
   for child in element_node:iter_children() do
-    if child:type() == "jsx_attribute" then
+    local child_type = child:type()
+    local child_text = vim.treesitter.get_node_text(child, 0):sub(1, 50):gsub("\n", "\\n")
+    log("    child: type=" .. child_type .. " text=" .. child_text)
+
+    if child_type == "jsx_attribute" then
+      -- Try field access first
       local attr_name_node = child:field("name")[1]
+      log("      field('name') result: " .. tostring(attr_name_node))
+
+      -- If field access fails, try iterating children
+      if not attr_name_node then
+        for attr_child in child:iter_children() do
+          log("      attr_child: type=" .. attr_child:type())
+          if attr_child:type() == "property_identifier" or attr_child:type() == "identifier" then
+            attr_name_node = attr_child
+            break
+          end
+        end
+      end
+
       if attr_name_node then
         local attr_name = vim.treesitter.get_node_text(attr_name_node, 0)
+        log("      attr_name=" .. attr_name)
         if attr_name == "className" then
           class_attr = child
-          break
+          log("      Found className attribute!")
         end
       end
     end
   end
 
+  log("  should_debug_element: is_raw_html=" .. tostring(is_raw_html) .. " class_attr=" .. tostring(class_attr))
   return is_raw_html or class_attr ~= nil, class_attr
 end
 
 -- Get className attribute value node
 local function get_classname_value_node(class_attr)
   if not class_attr then
+    log("  get_classname_value_node: no class_attr")
     return nil
   end
 
+  -- Try field access first
   local value_node = class_attr:field("value")[1]
+  log("  get_classname_value_node: field('value') = " .. tostring(value_node))
+
+  -- If field access fails, iterate children to find the value
   if not value_node then
+    log("  get_classname_value_node: iterating children:")
+    for child in class_attr:iter_children() do
+      local child_type = child:type()
+      log("    child: type=" .. child_type)
+      -- Value is typically a string, jsx_expression, or template_string
+      if child_type == "string" or child_type == "string_fragment" or
+         child_type == "jsx_expression" or child_type == "template_string" then
+        value_node = child
+        log("    Found value node: " .. child_type)
+        break
+      end
+    end
+  end
+
+  if not value_node then
+    log("  get_classname_value_node: no value node found")
     return nil
   end
+
+  log("  get_classname_value_node: value_node type=" .. value_node:type())
 
   -- Handle string literal
   if value_node:type() == "string" or value_node:type() == "string_fragment" then
