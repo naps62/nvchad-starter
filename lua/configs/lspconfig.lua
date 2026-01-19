@@ -34,6 +34,14 @@ M.defaults = function()
   })
   vim.lsp.enable "lua_ls"
 
+  -- vim.lsp.config("wgsl_analyzer", {
+  --   on_attach = M.on_attach,
+  --   on_init = nvlsp.on_init,
+  --   capabilities = nvlsp.capabilities,
+  --   inlay_hints = { enable = true },
+  -- })
+  -- vim.lsp.enable "wgsl_analyzer"
+
   vim.lsp.config("solidity_ls_nomicfoundation", {
     on_attach = M.on_attach,
     on_init = nvlsp.on_init,
