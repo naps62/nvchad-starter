@@ -110,35 +110,9 @@ local function find_jsx_element(node)
   return nil
 end
 
--- Check if element should be debugged
+-- Check if element should be debugged (now allows all JSX elements including components)
 local function should_debug_element(element_node)
-  if not element_node then return false end
-
-  for child in element_node:iter_children() do
-    local child_type = child:type()
-
-    -- Check for raw HTML element (lowercase)
-    if child_type == "identifier" then
-      local tag_name = vim.treesitter.get_node_text(child, 0)
-      if tag_name:match("^[a-z]") then
-        return true
-      end
-    end
-
-    -- Check for className attribute
-    if child_type == "jsx_attribute" then
-      for attr_child in child:iter_children() do
-        if attr_child:type() == "property_identifier" or attr_child:type() == "identifier" then
-          if vim.treesitter.get_node_text(attr_child, 0) == "className" then
-            return true
-          end
-          break
-        end
-      end
-    end
-  end
-
-  return false
+  return element_node ~= nil
 end
 
 -- Find nearest debuggable element
