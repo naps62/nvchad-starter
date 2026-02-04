@@ -34,6 +34,7 @@ return {
 
   {
     "aznhe21/actions-preview.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
     config = function()
       local hl = require "actions-preview.highlight"
       require("actions-preview").setup {
