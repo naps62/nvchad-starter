@@ -26,7 +26,8 @@ function M.apply_theme(mode)
   local theme = M.themes[mode] or M.themes.dark
 
   -- Update the theme using NvChad's base46
-  require("nvchad.utils").replace_word('theme = "' .. vim.g.nvchad_theme .. '"', 'theme = "' .. theme .. '"')
+  local current = vim.g.nvchad_theme or theme
+  require("nvchad.utils").replace_word('theme = "' .. current .. '"', 'theme = "' .. theme .. '"')
   require("base46").load_all_highlights()
 
   vim.g.nvchad_theme = theme
