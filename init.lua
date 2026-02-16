@@ -35,3 +35,9 @@ require "nvchad.autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
+-- Start theme sync with system (darkman)
+vim.schedule(function()
+  local theme_sync = require "theme-sync"
+  theme_sync.watch()
+end)

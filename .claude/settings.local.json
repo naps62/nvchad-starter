@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(NVIM_APPNAME=nvchad-test nvim:*)",
+      "Bash(darkman get:*)"
+    ]
+  }
+}
