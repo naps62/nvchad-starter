@@ -21,3 +21,9 @@ vim.g.neovide_scroll_animation_length = 0.15
 vim.g.neovide_cursor_animation_length = 0.11
 
 vim.o.swapfile = false
+
+-- Command to manually sync theme with system
+vim.api.nvim_create_user_command("ThemeSync", function()
+  require("theme-sync").sync()
+  vim.notify("Theme synced with system", vim.log.levels.INFO)
+end, { desc = "Sync theme with system (darkman)" })
