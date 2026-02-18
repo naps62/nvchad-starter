@@ -36,8 +36,7 @@ vim.schedule(function()
   require "mappings"
 end)
 
--- Start theme sync with system (darkman)
+-- Apply correct theme on startup based on current darkman mode
 vim.schedule(function()
-  local theme_sync = require "theme-sync"
-  theme_sync.watch()
+  require("theme-sync").sync()
 end)
