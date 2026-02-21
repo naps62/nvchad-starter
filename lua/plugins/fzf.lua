@@ -10,6 +10,14 @@ return {
         cmd = "rg --hidden --files -g '!.git'",
       },
       grep = { multiline = true },
+      actions = {
+        files = {
+          ["default"] = function(...) require("fzf-lua.actions").file_edit(...) end,
+          ["ctrl-s"] = function(...) require("fzf-lua.actions").file_split(...) end,
+          ["ctrl-v"] = function(...) require("fzf-lua.actions").file_vsplit(...) end,
+          ["ctrl-t"] = function(...) require("fzf-lua.actions").file_tabedit(...) end,
+        },
+      },
     },
     cmd = "FzfLua",
     keys = {
