@@ -81,7 +81,7 @@ M.on_attach = function(client, bufnr)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
-  map("n", "<leader>rn", require "nvchad.lsp.renamer", opts "NvRenamer")
+  map("n", "<leader>rn", vim.lsp.buf.rename, opts "Rename")
 
   map("n", "gd", function()
     require("telescope.builtin").lsp_definitions()

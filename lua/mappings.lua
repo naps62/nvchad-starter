@@ -6,6 +6,7 @@ local map = vim.keymap.set
 vim.keymap.del("n", "<leader>e")
 vim.keymap.del("n", "<C-n>")
 vim.keymap.del("n", "<leader>rn")
+map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "LSP Rename" })
 
 -- mini.files
 map("n", "<leader>e", function()
