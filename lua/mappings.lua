@@ -5,6 +5,7 @@ local map = vim.keymap.set
 -- remove nvim-tree mappings (using mini.files instead)
 vim.keymap.del("n", "<leader>e")
 vim.keymap.del("n", "<C-n>")
+vim.keymap.del("n", "<leader>rn")
 
 -- mini.files
 map("n", "<leader>e", function()
