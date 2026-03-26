@@ -35,8 +35,3 @@ require "nvchad.autocmds"
 vim.schedule(function()
   require "mappings"
 end)
-
--- Apply correct theme on startup based on current darkman mode
-vim.schedule(function()
-  require("theme-sync").sync()
-end)
