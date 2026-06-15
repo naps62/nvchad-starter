@@ -1,9 +1,12 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    -- Pin to archived `master` branch: this config uses the legacy
+    -- `nvim-treesitter.configs` API, which the `main` rewrite dropped.
+    branch = "master",
     dependencies = {
       "JoosepAlviste/nvim-ts-context-commentstring",
-      "nvim-treesitter/nvim-treesitter-textobjects",
+      { "nvim-treesitter/nvim-treesitter-textobjects", branch = "master" },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
