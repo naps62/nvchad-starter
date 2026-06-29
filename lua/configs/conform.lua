@@ -2,10 +2,10 @@ local options = {
   formatters_by_ft = {
     lua = { "stylua" },
     rust = { "rustfmt", require_cwd = true },
-    javascript = { "biome-check", "biome", "biome-organize-imports" },
-    typescript = { "biome-check", "biome", "biome-organize-imports" },
-    json = { "biome-check", "biome" },
-    yaml = { "biome-check" },
+    -- biome-check runs format + organize-imports + safe lint fixes in one pass
+    javascript = { "biome-check" },
+    typescript = { "biome-check" },
+    json = { "biome-check" },
     solidity = { "forge_fmt" },
     nix = { "nixfmt" },
     toml = { "taplo" },

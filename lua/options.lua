@@ -21,3 +21,6 @@ vim.g.neovide_scroll_animation_length = 0.15
 vim.g.neovide_cursor_animation_length = 0.11
 
 vim.o.swapfile = false
+
+-- reload files edited on disk (e.g. by coding agents); see lua/autocmds.lua for the trigger
+vim.o.autoread = true

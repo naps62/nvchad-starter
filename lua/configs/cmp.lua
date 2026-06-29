@@ -3,11 +3,11 @@ local lspkind = require "lspkind"
 local nvchad_options = require "nvchad.configs.cmp"
 
 local options = {
+  -- Supermaven handles AI completion inline (ghost text, accept with <C-Enter>);
+  -- it is not a cmp source, so it is intentionally absent here.
   sources = {
-    -- { name = "supermaven" },
     { name = "nvim_lsp" },
     { name = "luasnip" },
-    { name = "copilot" },
     { name = "buffer" },
     { name = "nvim_lua" },
     { name = "path" },
@@ -17,7 +17,6 @@ local options = {
     format = lspkind.cmp_format {
       mode = "symbol",
       max_width = 50,
-      symbol_map = { Supermaven = "" },
     },
   },
 }
